@@ -1,4 +1,4 @@
-package models;
+package ar.edu.itba.ss.models;
 
 public class Pair<U, V>
 {

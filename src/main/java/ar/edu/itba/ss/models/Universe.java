@@ -1,4 +1,4 @@
-package models;
+package ar.edu.itba.ss.models;
 
 import java.util.ArrayList;
 import java.util.List;

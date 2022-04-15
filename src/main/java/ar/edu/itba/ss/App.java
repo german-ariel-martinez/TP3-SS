@@ -1,7 +1,6 @@
-package main;
+package ar.edu.itba.ss;
 
-import models.Particle;
-import models.Universe;
+import ar.edu.itba.ss.models.Universe;
 
 public class App {
     public static void main(String[] args) {
