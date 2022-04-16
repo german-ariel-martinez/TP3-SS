@@ -41,10 +41,10 @@ public class Particle {
             tx = (radius - x)/vx;
         }
         // Colision vertical
-        if(vy > 0.0) {
+        if(vy < 0.0) {
             ty = (radius - y)/vy;
         } else {
-            ty = (side + radius - y)/vy;
+            ty = (side - radius - y)/vy;
         }
         return Math.min(tx, ty);
     }
