@@ -44,7 +44,7 @@ public class Universe {
                 vx = rnd.nextDouble() * 2;
                 vy = rnd.nextDouble() * 2;
                 mod = Math.sqrt((vx*vx)+(vy*vy));
-            } while (mod >= 2.0);
+            } while (mod >= 0.5);
             mods.add(new Pair<>(vx, vy));
         }
 
@@ -76,12 +76,21 @@ public class Universe {
         }
 
         OutputParser.writeUniverse(particles, 0);
+        //TODO: revisar
+        try{
+            OutputParser.writeVelocityPythonCSV(particles);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Comienza la simulacion.
     public void simulate () {
+        List<Double> collisionTimes = new ArrayList<>();
+        long collisions = 0;
         long start = System.currentTimeMillis();
-        while (System.currentTimeMillis() - start < 2000) {
+//        while (System.currentTimeMillis() - start < 2000) {
+        while (collisions < 18000 && bigParticleInBoundaries()) {
             Particle toCollide1 = null, toCollide2 = null;
             // PASO 2: Calcular el tiempo hasta el primer choque
             double tMin = 999999999;
@@ -109,16 +118,19 @@ public class Universe {
                 }
             }
 
+            // Nos guardamos el tiempo minimo para promediarlo
+            collisionTimes.add(tMin);
+
             // PASO 3: evolucionar el universo hasta tMin
             for (Particle p : particles) {
                 p.updatePosition(tMin);
             }
 
             // PASO 4: se guarda el estado del sistema (posiciones y velocidades) en tMin
-            // TODO falta
 
             // PASO 5: hacemos el choque
             if (toCollide2 == null) {
+                collisions++;
                 // Chocamos con una wall
                 boolean horizontal;
                 if (toCollide1.getX() == 0.2 || toCollide1.getX() == 5.8 || toCollide1.getX() == 0.7 || toCollide1.getX() == 5.3) {
@@ -132,12 +144,33 @@ public class Universe {
                 }
                 toCollide1.collisionWall(horizontal);
             } else {
+                collisions++;
                 // Chocamos con otra particula
                 toCollide1.collisionParticle(toCollide2);
             }
 
             OutputParser.writeUniverse(particles, 0);
         }
+        Double meanTime = collisionTimes.stream().reduce(0.0, Double::sum)/collisionTimes.size();
+        try{
+            OutputParser.writeCollisionTimesPythonCSV(collisionTimes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("El tiempo promedio de choques es => "+meanTime);
+        long end = System.currentTimeMillis();
+        System.out.println(collisions);
+        System.out.println(end-start);
+        System.out.println("Frecuencia de colisiones => " + ((double)collisions/(end-start)));
+    }
+
+    private Boolean bigParticleInBoundaries(){
+        double r = BigParticle.getRadius();
+        double x = BigParticle.getX();
+        double y = BigParticle.getY();
+        if (x-r <= 0 || x+r >= 6 || y-r <= 0 || y+r >= 6)
+            return false;
+        return true;
     }
 
 }

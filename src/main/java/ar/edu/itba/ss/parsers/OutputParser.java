@@ -41,26 +41,43 @@ public class OutputParser {
         dump.append("1").append(" ").append("6").append(" ").append("6").append(" ").append("0 ").append("0.0000001").append(" \n");
     }
 
-//    public static void writeAux(int n) throws IOException {
-//        String pythonFilename = "outputForPython.csv";
-//        FileWriter fw = new FileWriter(pythonFilename, true);
-//        BufferedWriter bw = new BufferedWriter(fw);
-//        if(first){
-//            bw.write(String.valueOf(n));
-//            first=false;
-//        }else
-//            bw.write("," + n);
-//        bw.close();
-//    }
+    public static void writeVelocityPythonCSV(List<Particle> particles) throws IOException {
+        String pythonFilename = "outPutVelocities.csv";
+        FileWriter fw = new FileWriter(pythonFilename, true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        StringBuilder dump = new StringBuilder("#,velocity\n");
+        int i= 0;
+        for (Particle p : particles) {
+            double v = Math.sqrt(Math.pow(p.getVx(), 2) + Math.pow(p.getVy(), 2));
+            dump.append(i).append(",").append(v).append("\n");
+            i++;
+        }
+        bw.write(dump.toString());
+        bw.close();
+    }
 
-//    public static void createCleanPythonFile(int n) {
-//        Path fileToDeletePath = Paths.get("outputForPython.csv");
-//        try {
-//            Files.deleteIfExists(fileToDeletePath);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public static void writeCollisionTimesPythonCSV(List<Double> times) throws IOException {
+        String pythonFilename = "outputCollisionTimes.csv";
+        FileWriter fw = new FileWriter(pythonFilename, true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        StringBuilder dump = new StringBuilder("#,CollisionTimes\n");
+        int i=0;
+        for (Double t : times) {
+            dump.append(i).append(",").append(t).append("\n");
+            i++;
+        }
+        bw.write(dump.toString());
+        bw.close();
+    }
+
+    public static void createCleanPythonFile(String fileName) {
+        Path fileToDeletePath = Paths.get(fileName);
+        try {
+            Files.deleteIfExists(fileToDeletePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void setFileName(String fn) {
         fileName = fn;
