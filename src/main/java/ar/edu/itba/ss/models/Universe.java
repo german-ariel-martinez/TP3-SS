@@ -44,7 +44,7 @@ public class Universe {
                 vx = rnd.nextDouble() * 2;
                 vy = rnd.nextDouble() * 2;
                 mod = Math.sqrt((vx*vx)+(vy*vy));
-            } while (mod >= 0.5);
+            } while (mod >= 2);
             mods.add(new Pair<>(vx, vy));
         }
 
@@ -76,12 +76,13 @@ public class Universe {
         }
 
         OutputParser.writeUniverse(particles, 0);
+        OutputParser.writePythonCSV(particles, 0,0);
         //TODO: revisar
-        try{
-            OutputParser.writeVelocityPythonCSV(particles);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try{
+//            OutputParser.writeVelocityPythonCSV(particles);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     // Comienza la simulacion.
@@ -150,13 +151,14 @@ public class Universe {
             }
 
             OutputParser.writeUniverse(particles, 0);
+            OutputParser.writePythonCSV(particles, System.currentTimeMillis()-start, tMin);
         }
         Double meanTime = collisionTimes.stream().reduce(0.0, Double::sum)/collisionTimes.size();
-        try{
-            OutputParser.writeCollisionTimesPythonCSV(collisionTimes);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try{
+//            OutputParser.writeCollisionTimesPythonCSV(collisionTimes);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         System.out.println("El tiempo promedio de choques es => "+meanTime);
         long end = System.currentTimeMillis();
         System.out.println(collisions);

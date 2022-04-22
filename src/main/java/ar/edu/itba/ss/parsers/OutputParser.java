@@ -13,6 +13,7 @@ import java.util.List;
 public class OutputParser {
 
     private static String fileName;
+    private static int state_number = 0;
     private static boolean first = true;
 
     public static void writeUniverse(List<Particle> particles, long eTime) {
@@ -26,13 +27,36 @@ public class OutputParser {
                 dump.append(rainbowPercentage).append(" ");
                 dump.append(p.getX()).append(" ").append(p.getY()).append(" ").append("0 ").append(p.getRadius()).append(" \n");
             }
-            appendToEndOfFile(dump.toString());
+            appendToEndOfFile("outputTP3.xyz",dump.toString());
 //            writeAux(particlesToDraw);
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
     }
+
+    public static void writePythonCSV(List<Particle> particles, long eTime, double tMin) {
+        try {
+            StringBuilder dump = new StringBuilder("");
+            if(first){
+                dump.append("State,Time,TMin,X,Y,V\n");
+                first=false;
+            }
+            for (Particle p : particles) {
+                if(p.getRadius() != 0.7) {
+                    double v = Math.sqrt(Math.pow(p.getVx(), 2) + Math.pow(p.getVy(), 2));
+                    dump.append(state_number).append(",").append(eTime).append(",").append(tMin).append(",").append(p.getX()).append(",").append(p.getY()).append(",").append(v).append("\n");
+                }
+            }
+            state_number++;
+            appendToEndOfFile("outputPythonCSV.csv",dump.toString());
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+
 
     private static void appendWallParticles(StringBuilder dump) {
         dump.append("1").append(" ").append("0").append(" ").append("0").append(" ").append("0 ").append("0.0000001").append(" \n");
@@ -41,37 +65,37 @@ public class OutputParser {
         dump.append("1").append(" ").append("6").append(" ").append("6").append(" ").append("0 ").append("0.0000001").append(" \n");
     }
 
-    public static void writeVelocityPythonCSV(List<Particle> particles) throws IOException {
-        String pythonFilename = "outPutVelocities.csv";
-        FileWriter fw = new FileWriter(pythonFilename, true);
-        BufferedWriter bw = new BufferedWriter(fw);
-        StringBuilder dump = new StringBuilder("#,velocity\n");
-        int i= 0;
-        for (Particle p : particles) {
-            double v = Math.sqrt(Math.pow(p.getVx(), 2) + Math.pow(p.getVy(), 2));
-            dump.append(i).append(",").append(v).append("\n");
-            i++;
-        }
-        bw.write(dump.toString());
-        bw.close();
-    }
+//    public static void writeVelocityPythonCSV(List<Particle> particles) throws IOException {
+//        String pythonFilename = "outPutVelocities.csv";
+//        FileWriter fw = new FileWriter(pythonFilename, true);
+//        BufferedWriter bw = new BufferedWriter(fw);
+//        StringBuilder dump = new StringBuilder("#,velocity\n");
+//        int i= 0;
+//        for (Particle p : particles) {
+//            double v = Math.sqrt(Math.pow(p.getVx(), 2) + Math.pow(p.getVy(), 2));
+//            dump.append(i).append(",").append(v).append("\n");
+//            i++;
+//        }
+//        bw.write(dump.toString());
+//        bw.close();
+//    }
+//
+//    public static void writeCollisionTimesPythonCSV(List<Double> times) throws IOException {
+//        String pythonFilename = "outputCollisionTimes.csv";
+//        FileWriter fw = new FileWriter(pythonFilename, true);
+//        BufferedWriter bw = new BufferedWriter(fw);
+//        StringBuilder dump = new StringBuilder("#,CollisionTimes\n");
+//        int i=0;
+//        for (Double t : times) {
+//            dump.append(i).append(",").append(t).append("\n");
+//            i++;
+//        }
+//        bw.write(dump.toString());
+//        bw.close();
+//    }
 
-    public static void writeCollisionTimesPythonCSV(List<Double> times) throws IOException {
-        String pythonFilename = "outputCollisionTimes.csv";
-        FileWriter fw = new FileWriter(pythonFilename, true);
-        BufferedWriter bw = new BufferedWriter(fw);
-        StringBuilder dump = new StringBuilder("#,CollisionTimes\n");
-        int i=0;
-        for (Double t : times) {
-            dump.append(i).append(",").append(t).append("\n");
-            i++;
-        }
-        bw.write(dump.toString());
-        bw.close();
-    }
-
-    public static void createCleanPythonFile(String fileName) {
-        Path fileToDeletePath = Paths.get(fileName);
+    public static void createCleanPythonFile() {
+        Path fileToDeletePath = Paths.get("outputPythonCSV.csv");
         try {
             Files.deleteIfExists(fileToDeletePath);
         } catch (IOException e) {
@@ -83,8 +107,8 @@ public class OutputParser {
         fileName = fn;
     }
 
-    private static void appendToEndOfFile(String text) throws IOException {
-        FileWriter fw = new FileWriter(fileName, true);
+    private static void appendToEndOfFile(String file,String text) throws IOException {
+        FileWriter fw = new FileWriter(file, true);
         BufferedWriter bw = new BufferedWriter(fw);
         bw.write(text);
         bw.close();
