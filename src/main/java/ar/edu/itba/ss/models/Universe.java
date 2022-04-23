@@ -33,18 +33,17 @@ public class Universe {
     // no se superponen
     public void populate(int N) {
         Random rnd = new Random();
-        double vx, vy, mod;
+        double vx, vy;
+        double v, angulo;
         int aux = 0;
 
         List<Pair<Double, Double>> mods = new ArrayList<>();
         for (int i = 0; i < N; i++) {
             // Nos fijamos que el modulo de la velocidad sea menor a 2.
-            // TODO hay que dejar que las velocidades puedan ser negativas
-            do {
-                vx = rnd.nextDouble() * 2;
-                vy = rnd.nextDouble() * 2;
-                mod = Math.sqrt((vx*vx)+(vy*vy));
-            } while (mod >= 2);
+            v = rnd.nextDouble() * 2;
+            angulo = rnd.nextDouble() * 2 * Math.PI;
+            vx = Math.cos(angulo) * v;
+            vy = Math.sin(angulo) * v;
             mods.add(new Pair<>(vx, vy));
         }
 
