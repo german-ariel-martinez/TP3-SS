@@ -76,6 +76,7 @@ public class Universe {
 
         OutputParser.writeUniverse(particles, 0);
         OutputParser.writePythonCSV(particles, 0,0);
+        OutputParser.writeBigParticlePythonCSV(BigParticle, 0, 0);
         //TODO: revisar
 //        try{
 //            OutputParser.writeVelocityPythonCSV(particles);
@@ -90,7 +91,7 @@ public class Universe {
         long collisions = 0;
         long start = System.currentTimeMillis();
 //        while (System.currentTimeMillis() - start < 2000) {
-        while (collisions < 18000 && bigParticleInBoundaries()) {
+        while (collisions < 100000 && bigParticleInBoundaries()) {
             Particle toCollide1 = null, toCollide2 = null;
             // PASO 2: Calcular el tiempo hasta el primer choque
             double tMin = 999999999;
@@ -151,13 +152,9 @@ public class Universe {
 
             OutputParser.writeUniverse(particles, 0);
             OutputParser.writePythonCSV(particles, System.currentTimeMillis()-start, tMin);
+            OutputParser.writeBigParticlePythonCSV(BigParticle, System.currentTimeMillis()-start, tMin);
         }
         Double meanTime = collisionTimes.stream().reduce(0.0, Double::sum)/collisionTimes.size();
-//        try{
-//            OutputParser.writeCollisionTimesPythonCSV(collisionTimes);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         System.out.println("El tiempo promedio de choques es => "+meanTime);
         long end = System.currentTimeMillis();
         System.out.println(collisions);
