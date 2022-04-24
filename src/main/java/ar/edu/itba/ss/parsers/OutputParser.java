@@ -21,6 +21,7 @@ public class OutputParser {
     private static int ten_particles_state_number = 0;
     private static boolean first = true;
     private static boolean first10 = true;
+    private static boolean bp_first = true;
 
     public static void writeUniverse(List<Particle> particles, long eTime) {
         int numberOfParticles = 4 + particles.size(); // Le metemos las 4 particulas en los vertices del universo
@@ -65,11 +66,11 @@ public class OutputParser {
     public static void writeBigParticlePythonCSV(Particle bp, long eTime, double tMin) {
         try {
             StringBuilder dump = new StringBuilder("");
-            if(first){
+            if(bp_first){
                 dump.append("State,Time,TMin,X,Y\n");
-                first=false;
+                bp_first=false;
             }
-            dump.append(big_particle_state_number).append(",").append(eTime).append(",").append(tMin).append(",").append(bp.getX()).append(",").append(bp.getY());
+            dump.append(big_particle_state_number).append(",").append(eTime).append(",").append(tMin).append(",").append(bp.getX()).append(",").append(bp.getY()).append("\n");
             big_particle_state_number++;
             appendToEndOfFile(fileName3,dump.toString());
         } catch (IOException e) {
@@ -78,7 +79,7 @@ public class OutputParser {
         }
     }
 
-    public static void write10ParticlesFile(List<Particle> particles, long eTime, double tMin) {
+    public static void write5ParticlesFile(List<Particle> particles, long eTime, double tMin) {
         try {
             StringBuilder dump = new StringBuilder("");
             if(first10){

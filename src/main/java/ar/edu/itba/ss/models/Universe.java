@@ -70,12 +70,13 @@ public class Universe {
         OutputParser.writeUniverse(particles, 0);
         OutputParser.writePythonCSV(particles, 0,0);
         OutputParser.writeBigParticlePythonCSV(BigParticle, 0, 0);
-
+        OutputParser.write5ParticlesFile(particles, 0, 0);
         find5ParticlesClosestToCenter();
     }
 
     // Comienza la simulacion.
     public void simulate () {
+        double total_time = 0;
         List<Double> collisionTimes = new ArrayList<>();
         long collisions = 0;
         long start = System.currentTimeMillis();
@@ -106,7 +107,7 @@ public class Universe {
                     }
                 }
             }
-
+             total_time+=tMin;
             // Nos guardamos el tiempo minimo para promediarlo
             collisionTimes.add(tMin);
 
@@ -141,7 +142,7 @@ public class Universe {
             OutputParser.writeUniverse(particles, 0);
             OutputParser.writePythonCSV(particles, System.currentTimeMillis()-start, tMin);
             OutputParser.writeBigParticlePythonCSV(BigParticle, System.currentTimeMillis()-start, tMin);
-            OutputParser.write10ParticlesFile(particles, System.currentTimeMillis()-start, tMin);
+            OutputParser.write5ParticlesFile(particles, System.currentTimeMillis()-start, tMin);
         }
         Double meanTime = collisionTimes.stream().reduce(0.0, Double::sum)/collisionTimes.size();
         System.out.println("El tiempo promedio de choques es => "+meanTime);
@@ -149,6 +150,7 @@ public class Universe {
         System.out.println(collisions);
         System.out.println(end-start);
         System.out.println("Frecuencia de colisiones => " + ((double)collisions/(end-start)));
+        System.out.println("Frecuencia de colisiones con tMin => " + ((double)collisions/(total_time*1000)));
     }
 
     private void find5ParticlesClosestToCenter() {

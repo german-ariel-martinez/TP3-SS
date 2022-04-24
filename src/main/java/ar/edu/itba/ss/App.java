@@ -11,7 +11,7 @@ public class App {
         OutputParser.createCleanFile();
         OutputParser.createCleanPythonFile();
 
-        Universe u = new Universe(6, 105, TEMPERATURE);
+        Universe u = new Universe(6, 140, TEMPERATURE);
         u.simulate();
     }
 }
