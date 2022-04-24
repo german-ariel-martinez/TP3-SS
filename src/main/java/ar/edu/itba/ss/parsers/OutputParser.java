@@ -42,7 +42,7 @@ public class OutputParser {
         }
     }
 
-    public static void writePythonCSV(List<Particle> particles, long eTime, double tMin) {
+    public static void writePythonCSV(List<Particle> particles, double eTime, double tMin) {
         try {
             StringBuilder dump = new StringBuilder("");
             if(first){
@@ -63,7 +63,7 @@ public class OutputParser {
         }
     }
 
-    public static void writeBigParticlePythonCSV(Particle bp, long eTime, double tMin) {
+    public static void writeBigParticlePythonCSV(Particle bp, double eTime, double tMin) {
         try {
             StringBuilder dump = new StringBuilder("");
             if(bp_first){
@@ -79,7 +79,7 @@ public class OutputParser {
         }
     }
 
-    public static void write5ParticlesFile(List<Particle> particles, long eTime, double tMin) {
+    public static void write5ParticlesFile(List<Particle> particles, double eTime, double tMin) {
         try {
             StringBuilder dump = new StringBuilder("");
             if(first10){

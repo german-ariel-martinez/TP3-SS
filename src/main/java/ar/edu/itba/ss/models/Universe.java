@@ -139,10 +139,10 @@ public class Universe {
                 toCollide1.collisionParticle(toCollide2);
             }
 
-            OutputParser.writeUniverse(particles, 0);
-            OutputParser.writePythonCSV(particles, System.currentTimeMillis()-start, tMin);
-            OutputParser.writeBigParticlePythonCSV(BigParticle, System.currentTimeMillis()-start, tMin);
-            OutputParser.write5ParticlesFile(particles, System.currentTimeMillis()-start, tMin);
+//            OutputParser.writeUniverse(particles, 0);
+//            OutputParser.writePythonCSV(particles, total_time*1000, tMin);
+            OutputParser.writeBigParticlePythonCSV(BigParticle, total_time*1000, tMin);
+            OutputParser.write5ParticlesFile(particles, total_time*1000, tMin);
         }
         Double meanTime = collisionTimes.stream().reduce(0.0, Double::sum)/collisionTimes.size();
         System.out.println("El tiempo promedio de choques es => "+meanTime);
@@ -151,6 +151,7 @@ public class Universe {
         System.out.println(end-start);
         System.out.println("Frecuencia de colisiones => " + ((double)collisions/(end-start)));
         System.out.println("Frecuencia de colisiones con tMin => " + ((double)collisions/(total_time*1000)));
+        System.out.println(total_time*1000);
     }
 
     private void find5ParticlesClosestToCenter() {
