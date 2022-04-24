@@ -5,14 +5,13 @@ import ar.edu.itba.ss.parsers.OutputParser;
 
 public class App {
 
-    private static final String OUTPUT_FILE = "outputTP3.xyz";
     private static final double TEMPERATURE = 298.15;
 
     public static void main(String[] args) {
-        OutputParser.setFileName(OUTPUT_FILE);
         OutputParser.createCleanFile();
         OutputParser.createCleanPythonFile();
-        Universe u = new Universe(6, 125, TEMPERATURE);
+
+        Universe u = new Universe(6, 105, TEMPERATURE);
         u.simulate();
     }
 }

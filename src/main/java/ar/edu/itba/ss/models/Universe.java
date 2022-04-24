@@ -2,11 +2,9 @@ package ar.edu.itba.ss.models;
 
 import ar.edu.itba.ss.parsers.OutputParser;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Universe {
 
@@ -50,11 +48,6 @@ public class Universe {
         while ( aux != N ) {
             double randomX = rnd.nextDouble() * side;
             double randomY = rnd.nextDouble() * side;
-//            Double velX = Math.sqrt(3*8.314*temp/0.9) * ((rnd.nextDouble() > 0.5) ? -1 : 1);
-//            Double velY = Math.sqrt(3*8.314*temp/0.9) * ((rnd.nextDouble() > 0.5) ? -1 : 1);
-//            if(Math.sqrt((velX*velX)+(velY*velY) >= 2) {
-//                throw InvalidParameterException
-//            }
 
             Particle newPart = new Particle(randomX, randomY, 0.2, 0.9, mods.get(aux).first, mods.get(aux).second);
 
@@ -77,12 +70,8 @@ public class Universe {
         OutputParser.writeUniverse(particles, 0);
         OutputParser.writePythonCSV(particles, 0,0);
         OutputParser.writeBigParticlePythonCSV(BigParticle, 0, 0);
-        //TODO: revisar
-//        try{
-//            OutputParser.writeVelocityPythonCSV(particles);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
+        find10ParticlesClosestToCenter();
     }
 
     // Comienza la simulacion.
@@ -90,7 +79,6 @@ public class Universe {
         List<Double> collisionTimes = new ArrayList<>();
         long collisions = 0;
         long start = System.currentTimeMillis();
-//        while (System.currentTimeMillis() - start < 2000) {
         while (collisions < 100000 && bigParticleInBoundaries()) {
             Particle toCollide1 = null, toCollide2 = null;
             // PASO 2: Calcular el tiempo hasta el primer choque
@@ -153,6 +141,7 @@ public class Universe {
             OutputParser.writeUniverse(particles, 0);
             OutputParser.writePythonCSV(particles, System.currentTimeMillis()-start, tMin);
             OutputParser.writeBigParticlePythonCSV(BigParticle, System.currentTimeMillis()-start, tMin);
+            OutputParser.write10ParticlesFile(particles, System.currentTimeMillis()-start, tMin);
         }
         Double meanTime = collisionTimes.stream().reduce(0.0, Double::sum)/collisionTimes.size();
         System.out.println("El tiempo promedio de choques es => "+meanTime);
@@ -160,6 +149,44 @@ public class Universe {
         System.out.println(collisions);
         System.out.println(end-start);
         System.out.println("Frecuencia de colisiones => " + ((double)collisions/(end-start)));
+    }
+
+    private void find10ParticlesClosestToCenter() {
+        List<Particle> toReturn = new ArrayList<>();
+        boolean first = true;
+        for(Particle p : particles) {
+            if(first) {
+                first = false;
+                continue;
+            }
+            if(toReturn.size() < 10) {
+                // Las primeras 10 se añaden
+                toReturn.add(p);
+                continue;
+            }
+            double distance = Math.pow(BigParticle.getX()-p.getX(),2) +
+                    Math.pow(BigParticle.getY()-p.getY(),2) -
+                    Math.pow(0.7 + p.getRadius(), 2);
+            if(distance > 0) {
+                for(int i=0; i < toReturn.size(); i++) {
+                    Particle p2 = toReturn.get(i);
+                    double distance2 = Math.pow(BigParticle.getX()-p2.getX(),2) +
+                            Math.pow(BigParticle.getY()-p2.getY(),2) -
+                            Math.pow(0.7 + p2.getRadius(), 2);
+                    if(distance < distance2) {
+                        toReturn.set(i, p);
+                        break;
+                    }
+                }
+            }
+        }
+        for(Particle p : particles) {
+            for(Particle p2 : toReturn) {
+                if(p.getX() == p2.getX() && p.getY() == p2.getY()) {
+                    p.setMarca();
+                }
+            }
+        }
     }
 
     private Boolean bigParticleInBoundaries(){

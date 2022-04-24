@@ -1,3 +1,7 @@
 target
 .idea
 .DS_Store
+*.csv
+*.ipynb
+*.xyz
+/proyecto python/*

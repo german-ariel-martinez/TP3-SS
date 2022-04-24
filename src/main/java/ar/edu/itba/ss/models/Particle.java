@@ -11,6 +11,8 @@ public class Particle {
     private Double vx;
     private Double vy;
 
+    private boolean marca = false;
+
     // Constructor
     public Particle(Double x, Double y, Double r, Double m, Double vx, Double vy) {
         this.x = x;
@@ -144,6 +146,14 @@ public class Particle {
 
     public void setVy(Double vy) {
         this.vy = vy;
+    }
+
+    public boolean isMarca() {
+        return marca;
+    }
+
+    public void setMarca() {
+        this.marca = true;
     }
 
     // toString

@@ -12,10 +12,15 @@ import java.util.List;
 
 public class OutputParser {
 
-    private static String fileName;
+    private static final String fileName = "outputTP3.xyz";
+    private static final String fileName2 = "outputPythonCSV.csv";
+    private static final String fileName3 = "outputBigParticlePythonCSV.csv";
+    private static final String fileName4 = "tenParticles.csv";
     private static int state_number = 0;
     private static int big_particle_state_number = 0;
+    private static int ten_particles_state_number = 0;
     private static boolean first = true;
+    private static boolean first10 = true;
 
     public static void writeUniverse(List<Particle> particles, long eTime) {
         int numberOfParticles = 4 + particles.size(); // Le metemos las 4 particulas en los vertices del universo
@@ -28,7 +33,7 @@ public class OutputParser {
                 dump.append(rainbowPercentage).append(" ");
                 dump.append(p.getX()).append(" ").append(p.getY()).append(" ").append("0 ").append(p.getRadius()).append(" \n");
             }
-            appendToEndOfFile("outputTP3.xyz",dump.toString());
+            appendToEndOfFile(fileName,dump.toString());
 //            writeAux(particlesToDraw);
         } catch (IOException e) {
             System.out.println("An error occurred.");
@@ -50,7 +55,7 @@ public class OutputParser {
                 }
             }
             state_number++;
-            appendToEndOfFile("outputPythonCSV.csv",dump.toString());
+            appendToEndOfFile(fileName2,dump.toString());
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -66,7 +71,27 @@ public class OutputParser {
             }
             dump.append(big_particle_state_number).append(",").append(eTime).append(",").append(tMin).append(",").append(bp.getX()).append(",").append(bp.getY());
             big_particle_state_number++;
-            appendToEndOfFile("outputBigParticlePythonCSV.csv",dump.toString());
+            appendToEndOfFile(fileName3,dump.toString());
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void write10ParticlesFile(List<Particle> particles, long eTime, double tMin) {
+        try {
+            StringBuilder dump = new StringBuilder("");
+            if(first10){
+                dump.append("State,Time,TMin,X,Y\n");
+                first10=false;
+            }
+            for(Particle p : particles) {
+                if(p.isMarca()) {
+                    dump.append(ten_particles_state_number).append(",").append(eTime).append(",").append(tMin).append(",").append(p.getX()).append(",").append(p.getY()).append("\n");
+                }
+            }
+            ten_particles_state_number++;
+            appendToEndOfFile(fileName4,dump.toString());
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -82,13 +107,19 @@ public class OutputParser {
     }
 
     public static void createCleanPythonFile() {
-        Path fileToDeletePath = Paths.get("outputPythonCSV.csv");
+        Path fileToDeletePath = Paths.get(fileName2);
         try {
             Files.deleteIfExists(fileToDeletePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        fileToDeletePath = Paths.get("outputBigParticlePythonCSV.csv");
+        fileToDeletePath = Paths.get(fileName3);
+        try {
+            Files.deleteIfExists(fileToDeletePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        fileToDeletePath = Paths.get(fileName4);
         try {
             Files.deleteIfExists(fileToDeletePath);
         } catch (IOException e) {
@@ -96,9 +127,6 @@ public class OutputParser {
         }
     }
 
-    public static void setFileName(String fn) {
-        fileName = fn;
-    }
 
     private static void appendToEndOfFile(String file,String text) throws IOException {
         FileWriter fw = new FileWriter(file, true);
