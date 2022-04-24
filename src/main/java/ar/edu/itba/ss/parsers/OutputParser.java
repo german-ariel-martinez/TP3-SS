@@ -29,13 +29,11 @@ public class OutputParser {
             StringBuilder dump = new StringBuilder("" + numberOfParticles + "\n" + "Time=" + eTime + "\n");
             appendWallParticles(dump);
             for (Particle p : particles) {
-                // TODO revisar si podemos cambiar los colores de la animacion
                 int rainbowPercentage = 120;
                 dump.append(rainbowPercentage).append(" ");
                 dump.append(p.getX()).append(" ").append(p.getY()).append(" ").append("0 ").append(p.getRadius()).append(" \n");
             }
             appendToEndOfFile(fileName,dump.toString());
-//            writeAux(particlesToDraw);
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -44,7 +42,7 @@ public class OutputParser {
 
     public static void writePythonCSV(List<Particle> particles, double eTime, double tMin) {
         try {
-            StringBuilder dump = new StringBuilder("");
+            StringBuilder dump = new StringBuilder();
             if(first){
                 dump.append("State,Time,TMin,X,Y,V\n");
                 first=false;
@@ -81,7 +79,7 @@ public class OutputParser {
 
     public static void write5ParticlesFile(List<Particle> particles, double eTime, double tMin) {
         try {
-            StringBuilder dump = new StringBuilder("");
+            StringBuilder dump = new StringBuilder();
             if(first10){
                 dump.append("State,Time,TMin,X,Y\n");
                 first10=false;
