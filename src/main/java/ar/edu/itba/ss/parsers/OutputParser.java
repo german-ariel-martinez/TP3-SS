@@ -15,7 +15,7 @@ public class OutputParser {
     private static final String fileName = "outputTP3.xyz";
     private static final String fileName2 = "outputPythonCSV.csv";
     private static final String fileName3 = "outputBigParticlePythonCSV.csv";
-    private static final String fileName4 = "tenParticles.csv";
+    private static final String fileName4 = "fiveParticles.csv";
     private static int state_number = 0;
     private static int big_particle_state_number = 0;
     private static int ten_particles_state_number = 0;

@@ -71,7 +71,7 @@ public class Universe {
         OutputParser.writePythonCSV(particles, 0,0);
         OutputParser.writeBigParticlePythonCSV(BigParticle, 0, 0);
 
-        find10ParticlesClosestToCenter();
+        find5ParticlesClosestToCenter();
     }
 
     // Comienza la simulacion.
@@ -151,7 +151,7 @@ public class Universe {
         System.out.println("Frecuencia de colisiones => " + ((double)collisions/(end-start)));
     }
 
-    private void find10ParticlesClosestToCenter() {
+    private void find5ParticlesClosestToCenter() {
         List<Particle> toReturn = new ArrayList<>();
         boolean first = true;
         for(Particle p : particles) {
@@ -159,8 +159,8 @@ public class Universe {
                 first = false;
                 continue;
             }
-            if(toReturn.size() < 10) {
-                // Las primeras 10 se añaden
+            if(toReturn.size() < 5) {
+                // Las primeras 5 se añaden
                 toReturn.add(p);
                 continue;
             }
